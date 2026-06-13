@@ -83,24 +83,38 @@ const loadReviews = async () => {
 
   </div>
 ))}
+  </div>
+  
+  
+)}
 {reviews.length > 0 && (
   <div className="result-card">
     <h2>Review History</h2>
 
+    <table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Score</th>
+      <th>Issues</th>
+      <th>Complexity</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+
+  <tbody>
     {reviews.map((review) => (
-      <div key={review.id}>
-        <p>ID: {review.id}</p>
-        <p>Score: {review.score}</p>
-        <p>Issues: {review.numberOfIssues}</p>
-        <p>Complexity: {review.complexityLevel}</p>
-        <hr />
-      </div>
+      <tr key={review.id}>
+        <td>{review.id}</td>
+        <td>{review.score}</td>
+        <td>{review.numberOfIssues}</td>
+        <td>{review.complexityLevel}</td>
+        <td>{review.reviewDate}</td>
+      </tr>
     ))}
+  </tbody>
+</table>
   </div>
-)}
-  </div>
-  
-  
 )}
 
     </div>
