@@ -1,22 +1,77 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+body{
+    margin:0;
+    background:#f4f6f8;
+    font-family:Arial,sans-serif;
 }
 
-div {
-  text-align: center;
-  padding: 30px;
+.container{
+    width:80%;
+    margin:auto;
+    text-align:center;
+    padding:30px;
 }
 
-textarea {
-  width: 80%;
-  padding: 10px;
-  font-size: 16px;
+h1{
+    color:#333;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+textarea{
+    width:100%;
+    padding:15px;
+    font-size:16px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    resize:none;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 24px;
+    border:none;
+    border-radius:8px;
+    background:#1976d2;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#125ea7;
+}
+
+.result-card{
+    margin-top:30px;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+}
+
+.issue-card{
+    background:white;
+    margin-top:20px;
+    padding:20px;
+    border-radius:10px;
+    text-align:left;
+    box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+}
+
+.issue-card h3{
+    margin-top:0;
+    color:#d32f2f;
+}
+
+.high{
+    color:red;
+    font-weight:bold;
+}
+
+.medium{
+    color:orange;
+    font-weight:bold;
+}
+
+.low{
+    color:green;
+    font-weight:bold;
 }

@@ -5,6 +5,7 @@ function App() {
 
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   const analyzeCode = async () => {
   try {
@@ -18,8 +19,17 @@ function App() {
   }
 };
 
+const loadReviews = async () => {
+  try {
+    const response = await api.get("/api/reviews");
+    setReviews(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
-    <div>
+    <div className="container">
       <h1>Smart Code Review Assistant</h1>
 
       <textarea
@@ -34,6 +44,8 @@ function App() {
       <br />
 
       <button onClick={analyzeCode}>Analyze Code</button>
+
+      <button onClick={loadReviews}>Load Review History</button>
 
     {result && (
   <div>
@@ -50,19 +62,44 @@ function App() {
     </p>
 
     {result.issues.map((issue, index) => (
-  <div key={index}>
-    <h4>{issue.rule}</h4>
+  <div className="issue-card" key={index}>
 
-    <p>{issue.message}</p>
+    <h3>{issue.rule}</h3>
 
-    <p>{issue.suggestion}</p>
+    <p>
+      <strong>Message:</strong> {issue.message}
+    </p>
 
-    <p>{issue.severity}</p>
+    <p>
+      <strong>Suggestion:</strong> {issue.suggestion}
+    </p>
 
-    <hr />
+    <p>
+      <strong>Severity:</strong>
+      <span className={issue.severity.toLowerCase()}>
+        {" "}{issue.severity}
+      </span>
+    </p>
+
   </div>
 ))}
+{reviews.length > 0 && (
+  <div className="result-card">
+    <h2>Review History</h2>
+
+    {reviews.map((review) => (
+      <div key={review.id}>
+        <p>ID: {review.id}</p>
+        <p>Score: {review.score}</p>
+        <p>Issues: {review.numberOfIssues}</p>
+        <p>Complexity: {review.complexityLevel}</p>
+        <hr />
+      </div>
+    ))}
   </div>
+)}
+  </div>
+  
   
 )}
 
