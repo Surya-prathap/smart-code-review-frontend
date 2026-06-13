@@ -6,6 +6,7 @@ function App() {
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [selectedReview, setSelectedReview] = useState(null);
 
   const analyzeCode = async () => {
   try {
@@ -23,6 +24,15 @@ const loadReviews = async () => {
   try {
     const response = await api.get("/api/reviews");
     setReviews(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const viewReview = async (id) => {
+  try {
+    const response = await api.get(`/api/reviews/${id}`);
+    setSelectedReview(response.data);
   } catch (error) {
     console.error(error);
   }
@@ -99,6 +109,7 @@ const loadReviews = async () => {
       <th>Issues</th>
       <th>Complexity</th>
       <th>Date</th>
+      <th>Action</th>
     </tr>
   </thead>
 
@@ -110,10 +121,27 @@ const loadReviews = async () => {
         <td>{review.numberOfIssues}</td>
         <td>{review.complexityLevel}</td>
         <td>{review.reviewDate}</td>
+        <td><button onClick={() => viewReview(review.id)}>View</button></td>
       </tr>
     ))}
   </tbody>
 </table>
+
+{selectedReview && (
+  <div className="result-card">
+    <h2>Review Details</h2>
+
+    <p>ID: {selectedReview.id}</p>
+    <p>Score: {selectedReview.score}</p>
+    <p>Issues: {selectedReview.numberOfIssues}</p>
+    <p>Complexity: {selectedReview.complexityLevel}</p>
+    <p>Date: {selectedReview.reviewDate}</p>
+
+    <h3>Source Code</h3>
+
+    <pre>{selectedReview.code}</pre>
+  </div>
+)}
   </div>
 )}
 
