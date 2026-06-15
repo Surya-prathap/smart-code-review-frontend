@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "./services/api";
 
 function App() {
@@ -38,6 +38,10 @@ const viewReview = async (id) => {
   }
 };
 
+useEffect(() => {
+ loadReviews();
+},[])
+
   return (
     <div className="container">
       <h1>Smart Code Review Assistant</h1>
@@ -54,8 +58,6 @@ const viewReview = async (id) => {
       <br />
 
       <button onClick={analyzeCode}>Analyze Code</button>
-
-      <button onClick={loadReviews}>Load Review History</button>
 
     {result && (
   <div>
@@ -74,7 +76,7 @@ const viewReview = async (id) => {
     {result.issues.map((issue, index) => (
   <div className="issue-card" key={index}>
 
-    <h3>{issue.rule}</h3>
+    <h3>{issue.rule || issue.ruleName}</h3>
 
     <p>
       <strong>Message:</strong> {issue.message}
@@ -140,6 +142,32 @@ const viewReview = async (id) => {
     <h3>Source Code</h3>
 
     <pre>{selectedReview.code}</pre>
+
+    <h3>Detected Issues</h3>
+
+{selectedReview.issues.map((issue, index) => (
+  <div className="issue-card" key={index}>
+
+    <h4>{issue.rule || issue.ruleName}</h4>
+
+    <p>
+      <strong>Message:</strong> {issue.message}
+    </p>
+
+    <p>
+      <strong>Suggestion:</strong> {issue.suggestion}
+    </p>
+
+    <p>
+      <strong>Severity:</strong>
+      <span className={issue.severity.toLowerCase()}>
+        {" "}{issue.severity}
+      </span>
+    </p>
+
+  </div>
+))}
+
   </div>
 )}
   </div>
