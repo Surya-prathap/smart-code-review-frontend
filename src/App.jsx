@@ -7,6 +7,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
+  const [searchId, setSearchId] = useState("");
 
   const analyzeCode = async () => {
   try {
@@ -58,6 +59,20 @@ const deleteReview = async (id) => {
   }
 };
 
+const searchReview = async () => {
+  try {
+
+    const response = await api.get(
+      `/api/reviews/${searchId}`
+    );
+
+    setSelectedReview(response.data);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 useEffect(() => {
  loadReviews();
 },[])
@@ -78,6 +93,20 @@ useEffect(() => {
       <br />
 
       <button onClick={analyzeCode}>Analyze Code</button>
+
+        <br />
+        <br />
+       
+       <input
+  type="number"
+  placeholder="Enter Review ID"
+  value={searchId}
+  onChange={(e) => setSearchId(e.target.value)}
+/>
+
+<button onClick={searchReview}>
+  Search
+</button>
 
     {result && (
   <div>
@@ -115,41 +144,9 @@ useEffect(() => {
 
   </div>
 ))}
-  </div>
-  
+  </div> 
   
 )}
-{reviews.length > 0 && (
-  <div className="result-card">
-    <h2>Review History</h2>
-
-    <table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Score</th>
-      <th>Issues</th>
-      <th>Complexity</th>
-      <th>Date</th>
-      <th>Action</th>
-      <th>Delete</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    {reviews.map((review) => (
-      <tr key={review.id}>
-        <td>{review.id}</td>
-        <td>{review.score}</td>
-        <td>{review.numberOfIssues}</td>
-        <td>{review.complexityLevel}</td>
-        <td>{review.reviewDate}</td>
-        <td><button onClick={() => viewReview(review.id)}>View</button></td>
-        <td><button onClick={() => deleteReview(review.id)}>Delete</button></td>
-      </tr>
-    ))}
-  </tbody>
-</table>
 
 {selectedReview && (
   <div className="result-card">
@@ -192,6 +189,41 @@ useEffect(() => {
 
   </div>
 )}
+
+
+{reviews.length > 0 && (
+  <div className="result-card">
+   <h2>Review History</h2>
+
+    <table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Score</th>
+      <th>Issues</th>
+      <th>Complexity</th>
+      <th>Date</th>
+      <th>Action</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {reviews.map((review) => (
+      <tr key={review.id}>
+        <td>{review.id}</td>
+        <td>{review.score}</td>
+        <td>{review.numberOfIssues}</td>
+        <td>{review.complexityLevel}</td>
+        <td>{review.reviewDate}</td>
+        <td><button onClick={() => viewReview(review.id)}>View</button></td>
+        <td><button onClick={() => deleteReview(review.id)}>Delete</button></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+
   </div>
 )}
 
