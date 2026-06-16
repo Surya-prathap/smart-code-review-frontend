@@ -10,7 +10,7 @@ function App() {
 
   const analyzeCode = async () => {
   try {
-    const response = await api.post("/api/code-review", {
+    const response = await api.post("/api/reviews/code-review", {
       code: code
     });
 
@@ -33,6 +33,19 @@ const viewReview = async (id) => {
   try {
     const response = await api.get(`/api/reviews/${id}`);
     setSelectedReview(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteReview = async (id) => {
+  try {
+    await api.delete(`/api/reviews/${id}`);
+
+    setReviews(
+      reviews.filter((review) => review.id !== id)
+    );
+
   } catch (error) {
     console.error(error);
   }
@@ -112,6 +125,7 @@ useEffect(() => {
       <th>Complexity</th>
       <th>Date</th>
       <th>Action</th>
+      <th>Delete</th>
     </tr>
   </thead>
 
@@ -124,6 +138,7 @@ useEffect(() => {
         <td>{review.complexityLevel}</td>
         <td>{review.reviewDate}</td>
         <td><button onClick={() => viewReview(review.id)}>View</button></td>
+        <td><button onClick={() => deleteReview(review.id)}>Delete</button></td>
       </tr>
     ))}
   </tbody>
