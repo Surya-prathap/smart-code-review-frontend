@@ -106,6 +106,13 @@ const loadDashboardStats = async () => {
   }
 };
 
+const downloadPdf = (id) => {
+  window.open(
+    `http://localhost:8080/api/reviews/${id}/pdf`,
+    "_blank"
+  );
+};
+
 useEffect(() => {
  loadReviews();
  loadDashboardStats();
@@ -277,6 +284,7 @@ useEffect(() => {
       <th>Date</th>
       <th>Action</th>
       <th>Delete</th>
+      <th>PDF</th>
     </tr>
   </thead>
 
@@ -290,6 +298,7 @@ useEffect(() => {
         <td>{review.reviewDate}</td>
         <td><button onClick={() => viewReview(review.id)}>View</button></td>
         <td><button onClick={() => deleteReview(review.id)}>Delete</button></td>
+        <td><button onClick={() => downloadPdf(review.id)}>PDF</button></td>
       </tr>
     ))}
   </tbody>
