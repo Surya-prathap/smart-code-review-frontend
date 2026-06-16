@@ -9,6 +9,7 @@ function App() {
   const [selectedReview, setSelectedReview] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [dashboardStats, setDashboardStats] = useState(null);
 
   const analyzeCode = async () => {
   try {
@@ -17,6 +18,8 @@ function App() {
     });
 
     setResult(response.data);
+    loadDashboardStats();
+    loadReviews();
   } catch (error) {
     console.error(error);
   }
@@ -54,6 +57,7 @@ const deleteReview = async (id) => {
     setReviews(
       reviews.filter((review) => review.id !== id)
     );
+    loadDashboardStats();
 
   } catch (error) {
     console.error(error);
@@ -88,13 +92,49 @@ const filterReviewsByDate = async () => {
   }
 };
 
+const loadDashboardStats = async () => {
+  try {
+
+    const response = await api.get(
+      "/api/reviews/dashboard"
+    );
+
+    setDashboardStats(response.data);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 useEffect(() => {
  loadReviews();
+ loadDashboardStats();
 },[])
 
   return (
     <div className="container">
       <h1>Smart Code Review Assistant</h1>
+
+      {dashboardStats && (
+  <div className="dashboard">
+
+    <div className="result-card">
+      <h3>Total Reviews</h3>
+      <p>{dashboardStats.totalReviews}</p>
+    </div>
+
+    <div className="result-card">
+      <h3>Average Score</h3>
+      <p>{dashboardStats.averageScore.toFixed(2)}</p>
+    </div>
+
+    <div className="result-card">
+      <h3>Total Issues</h3>
+      <p>{dashboardStats.totalIssues}</p>
+    </div>
+
+  </div>
+)}
 
       <textarea
         rows="15"
