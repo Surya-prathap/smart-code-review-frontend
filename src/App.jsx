@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import api from "./services/api";
+import Dashboard from "./components/Dashboard";
+import CodeAnalyzer from "./components/CodeAnalyzer";
+import SearchAndFilter from "./components/SearchAndFilter";
+import ReviewDetails from "./components/ReviewDetails";
+import ReviewHistory from "./components/ReviewHistory";
+import AnalysisResult from "./components/AnalysisResult";
 
 function App() {
 
@@ -122,191 +128,34 @@ useEffect(() => {
     <div className="container">
       <h1>Smart Code Review Assistant</h1>
 
-      {dashboardStats && (
-  <div className="dashboard">
+    <Dashboard dashboardStats={dashboardStats}/>
 
-    <div className="result-card">
-      <h3>Total Reviews</h3>
-      <p>{dashboardStats.totalReviews}</p>
-    </div>
+    <CodeAnalyzer 
+          code={code} 
+          setCode={setCode} 
+          analyzeCode={analyzeCode}
+    />
 
-    <div className="result-card">
-      <h3>Average Score</h3>
-      <p>{dashboardStats.averageScore.toFixed(2)}</p>
-    </div>
+    <SearchAndFilter
+          searchId={searchId}
+          setSearchId={setSearchId}
+          searchReview={searchReview}
+          filterDate={filterDate}
+          setFilterDate={setFilterDate}
+          filterReviewsByDate={filterReviewsByDate}
+          loadReviews={loadReviews}
+    />
 
-    <div className="result-card">
-      <h3>Total Issues</h3>
-      <p>{dashboardStats.totalIssues}</p>
-    </div>
+<AnalysisResult result={result}/>
 
-  </div>
-)}
+<ReviewDetails selectedReview={selectedReview}/>
 
-      <textarea
-        rows="15"
-        cols="80"
-        placeholder="Paste your Java code here..."
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-      ></textarea>
-
-      <br />
-      <br />
-
-      <button onClick={analyzeCode}>Analyze Code</button>
-
-        <br />
-        <br />
-       
-       <input
-  type="number"
-  placeholder="Enter Review ID"
-  value={searchId}
-  onChange={(e) => setSearchId(e.target.value)}
+<ReviewHistory 
+     reviews={reviews}
+     viewReview={viewReview}
+     deleteReview={deleteReview}
+     downloadPdf={downloadPdf}
 />
-
-<button onClick={searchReview}>
-  Search
-</button>
-
-       <br />
-       <br />
-
-       <input
-  type="date"
-  value={filterDate}
-  onChange={(e) => setFilterDate(e.target.value)}
-/>
-
-<button onClick={filterReviewsByDate}>
-  Filter
-</button>
-
-<button onClick={loadReviews}>
-  Load All Reviews
-</button>
-
-    {result && (
-  <div>
-    <h2>Analysis Result</h2>
-
-    <p>Score: {result.score}</p>
-
-    <p>
-      Number Of Issues: {result.numberOfIssues}
-    </p>
-
-    <p>
-      Complexity Level: {result.complexityLevel}
-    </p>
-
-    {result.issues.map((issue, index) => (
-  <div className="issue-card" key={index}>
-
-    <h3>{issue.rule || issue.ruleName}</h3>
-
-    <p>
-      <strong>Message:</strong> {issue.message}
-    </p>
-
-    <p>
-      <strong>Suggestion:</strong> {issue.suggestion}
-    </p>
-
-    <p>
-      <strong>Severity:</strong>
-      <span className={issue.severity.toLowerCase()}>
-        {" "}{issue.severity}
-      </span>
-    </p>
-
-  </div>
-))}
-  </div> 
-  
-)}
-
-{selectedReview && (
-  <div className="result-card">
-    <h2>Review Details</h2>
-
-    <p>ID: {selectedReview.id}</p>
-    <p>Score: {selectedReview.score}</p>
-    <p>Issues: {selectedReview.numberOfIssues}</p>
-    <p>Complexity: {selectedReview.complexityLevel}</p>
-    <p>Date: {selectedReview.reviewDate}</p>
-
-    <h3>Source Code</h3>
-
-    <pre>{selectedReview.code}</pre>
-
-    <h3>Detected Issues</h3>
-
-{selectedReview.issues.map((issue, index) => (
-  <div className="issue-card" key={index}>
-
-    <h4>{issue.rule || issue.ruleName}</h4>
-
-    <p>
-      <strong>Message:</strong> {issue.message}
-    </p>
-
-    <p>
-      <strong>Suggestion:</strong> {issue.suggestion}
-    </p>
-
-    <p>
-      <strong>Severity:</strong>
-      <span className={issue.severity.toLowerCase()}>
-        {" "}{issue.severity}
-      </span>
-    </p>
-
-  </div>
-))}
-
-  </div>
-)}
-
-
-{reviews.length > 0 && (
-  <div className="result-card">
-   <h2>Review History</h2>
-
-    <table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Score</th>
-      <th>Issues</th>
-      <th>Complexity</th>
-      <th>Date</th>
-      <th>Action</th>
-      <th>Delete</th>
-      <th>PDF</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    {reviews.map((review) => (
-      <tr key={review.id}>
-        <td>{review.id}</td>
-        <td>{review.score}</td>
-        <td>{review.numberOfIssues}</td>
-        <td>{review.complexityLevel}</td>
-        <td>{review.reviewDate}</td>
-        <td><button onClick={() => viewReview(review.id)}>View</button></td>
-        <td><button onClick={() => deleteReview(review.id)}>Delete</button></td>
-        <td><button onClick={() => downloadPdf(review.id)}>PDF</button></td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
-
-  </div>
-)}
 
     </div>
   );
