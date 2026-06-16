@@ -39,6 +39,13 @@ const viewReview = async (id) => {
 };
 
 const deleteReview = async (id) => {
+
+  const confirmed = window.confirm("Are you sure you want to delete this review?");
+
+  if(!confirmed){
+    return;
+  }
+
   try {
     await api.delete(`/api/reviews/${id}`);
 
