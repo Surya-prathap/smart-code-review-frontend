@@ -8,6 +8,7 @@ function App() {
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [searchId, setSearchId] = useState("");
+  const [filterDate, setFilterDate] = useState("");
 
   const analyzeCode = async () => {
   try {
@@ -73,6 +74,20 @@ const searchReview = async () => {
   }
 };
 
+const filterReviewsByDate = async () => {
+  try {
+
+    const response = await api.get(
+      `/api/reviews/date/${filterDate}`
+    );
+
+    setReviews(response.data);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 useEffect(() => {
  loadReviews();
 },[])
@@ -106,6 +121,23 @@ useEffect(() => {
 
 <button onClick={searchReview}>
   Search
+</button>
+
+       <br />
+       <br />
+
+       <input
+  type="date"
+  value={filterDate}
+  onChange={(e) => setFilterDate(e.target.value)}
+/>
+
+<button onClick={filterReviewsByDate}>
+  Filter
+</button>
+
+<button onClick={loadReviews}>
+  Load All Reviews
 </button>
 
     {result && (
